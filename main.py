@@ -1,4 +1,5 @@
-import pygame
+import pygame, answer
+from random import randint
 
 CELL_SIZE = 40
 HORIZONTAL_CELLS = 20
@@ -29,19 +30,31 @@ def set_grid_dimensions(horizontal_cells, vertical_cells):
     HORIZONTAL_CELLS = horizontal_cells
     VERTICAL_CELLS = vertical_cells
 
+FRUIT = (HORIZONTAL_CELLS//2, VERTICAL_CELLS//2)
+FRUIT_CLR = (255, 0, 0)
+
 SNAKE_1 = [
     [2, 0],
     [1, 0],
     [0, 0]
 ]
-SNAKE_1_CLR = (255, 0, 0) # Red color for snake 1
+SNAKE_1_CLR = (0, 255, 0) 
 
 SNAKE_2 = [
     [HORIZONTAL_CELLS - 3, VERTICAL_CELLS - 1],
     [HORIZONTAL_CELLS - 2, VERTICAL_CELLS - 1],
     [HORIZONTAL_CELLS - 1, VERTICAL_CELLS - 1]
 ]
-SNAKE_2_CLR = (0, 0, 255) # Blue color for snake 2
+SNAKE_2_CLR = (0, 0, 255) 
+
+def generate_fruit():
+    global FRUIT
+    while True:
+        x = randint(0, HORIZONTAL_CELLS - 1)
+        y = randint(0, VERTICAL_CELLS - 1)
+        if [x, y] not in SNAKE_1 and [x, y] not in SNAKE_2:
+            FRUIT = (x, y)
+            break
 
 def move_snake(snake, direction):
     assert direction in ['U', 'D', 'L', 'R'], "Invalid direction. Use 'U', 'D', 'L', or 'R'."
@@ -56,12 +69,34 @@ def move_snake(snake, direction):
     elif direction == 'R':
         new_head = [head[0] + 1, head[1]]
     else:
-        return snake  # no movement
+        return snake  
+    
+    new_head[0] = new_head[0] % HORIZONTAL_CELLS  
+    new_head[1] = new_head[1] % VERTICAL_CELLS  
 
-    # Add new head and remove tail
+    if new_head == list(FRUIT):
+        snake = grow_snake(snake)
+        generate_fruit()
+    else:
+        if len(snake) > 1:
+            snake.pop()
+
     snake.insert(0, new_head)
-    snake.pop()
     return snake
+
+def grow_snake(snake):
+    assert isinstance(snake, list) and all(isinstance(segment, list) and len(segment) == 2 for segment in snake), "Snake must be a list of [x, y] pairs."
+    tail = snake[-1]
+    snake.append(tail)  
+    return snake
+
+def move_snake_1(direction):
+    global SNAKE_1
+    SNAKE_1 = move_snake(SNAKE_1, direction)
+
+def move_snake_2(direction):
+    global SNAKE_2
+    SNAKE_2 = move_snake(SNAKE_2, direction)
 
 def draw_grid():
     for x in range(HORIZONTAL_CELLS):
@@ -69,7 +104,6 @@ def draw_grid():
             rect = pygame.Rect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE - THICKNESS, CELL_SIZE - THICKNESS)
             pygame.draw.rect(pygame.display.get_surface(), (255, 255, 255), rect, THICKNESS)
 
-    # Draw snakes
     for segment in SNAKE_1:
         rect = pygame.Rect(segment[0] * CELL_SIZE, segment[1] * CELL_SIZE, CELL_SIZE - THICKNESS, CELL_SIZE - THICKNESS)
         pygame.draw.rect(pygame.display.get_surface(), SNAKE_1_CLR, rect)
@@ -77,24 +111,29 @@ def draw_grid():
     for segment in SNAKE_2:
         rect = pygame.Rect(segment[0] * CELL_SIZE, segment[1] * CELL_SIZE, CELL_SIZE - THICKNESS, CELL_SIZE - THICKNESS)
         pygame.draw.rect(pygame.display.get_surface(), SNAKE_2_CLR, rect)
+    
+    fruit_rect = pygame.Rect(FRUIT[0] * CELL_SIZE, FRUIT[1] * CELL_SIZE, CELL_SIZE - THICKNESS, CELL_SIZE - THICKNESS)
+    pygame.draw.rect(pygame.display.get_surface(), FRUIT_CLR, fruit_rect)
 
 def main():
-    # pygame setup
     pygame.init()
     screen = pygame.display.set_mode((HORIZONTAL_CELLS * CELL_SIZE, VERTICAL_CELLS * CELL_SIZE))
-    pygame.display.set_caption("Simple Pygame Window")
+    pygame.display.set_caption("Pygame Window")
 
-    # main loop
     running = True
+    clock = pygame.time.Clock()
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+        screen.fill((0, 0, 0)) 
 
-        screen.fill((0, 0, 0))  # fill the screen with black
+        move_snake_1(answer.best_snake_dir(SNAKE_1, SNAKE_2, FRUIT, HORIZONTAL_CELLS, VERTICAL_CELLS))
+        move_snake_2(answer.best_snake_dir(SNAKE_2, SNAKE_1, FRUIT, HORIZONTAL_CELLS, VERTICAL_CELLS))
+        
         draw_grid()
-        pygame.display.flip()    # update the display
-
+        pygame.display.flip()    
+        clock.tick(10)
     pygame.quit()
 
 if __name__ == "__main__":
