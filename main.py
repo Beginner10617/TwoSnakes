@@ -92,6 +92,7 @@ def grow_snake(snake):
 
 def move_snake_1(direction):
     global SNAKE_1
+    print(f"Moving Snake 1 in direction: {direction}")
     SNAKE_1 = move_snake(SNAKE_1, direction)
     if SNAKE_1[0] in SNAKE_2 + SNAKE_1[1:]:
         return False
@@ -99,6 +100,7 @@ def move_snake_1(direction):
 
 def move_snake_2(direction):
     global SNAKE_2
+    print(f"Moving Snake 2 in direction: {direction}")
     SNAKE_2 = move_snake(SNAKE_2, direction)
     if SNAKE_2[0] in SNAKE_1 + SNAKE_2[1:]:
         return False
