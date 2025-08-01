@@ -92,7 +92,7 @@ def grow_snake(snake):
 
 def move_snake_1(direction):
     global SNAKE_1
-    print(f"Moving Snake 1 in direction: {direction}")
+    print(direction, end='')
     SNAKE_1 = move_snake(SNAKE_1, direction)
     if SNAKE_1[0] in SNAKE_2 + SNAKE_1[1:]:
         return False
@@ -100,7 +100,7 @@ def move_snake_1(direction):
 
 def move_snake_2(direction):
     global SNAKE_2
-    print(f"Moving Snake 2 in direction: {direction}")
+    print(direction, end='')
     SNAKE_2 = move_snake(SNAKE_2, direction)
     if SNAKE_2[0] in SNAKE_1 + SNAKE_2[1:]:
         return False
@@ -127,7 +127,7 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((HORIZONTAL_CELLS * CELL_SIZE, VERTICAL_CELLS * CELL_SIZE))
     pygame.display.set_caption("Pygame Window")
-
+    print("Moves will be displayed in the console.")
     running = True
     clock = pygame.time.Clock()
     while running:
@@ -140,7 +140,7 @@ def main():
         y = move_snake_2(answer.best_snake_dir(deepcopy(SNAKE_2), deepcopy(SNAKE_1), FRUIT, HORIZONTAL_CELLS, VERTICAL_CELLS))
 
         if not x or not y:
-            print("Game Over!")
+            print("\nGame Over!")
             running = False
         draw_grid()
         pygame.display.flip()    
