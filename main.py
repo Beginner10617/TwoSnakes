@@ -1,5 +1,6 @@
 import pygame, answer
 from random import randint
+from copy import deepcopy
 
 CELL_SIZE = 40
 HORIZONTAL_CELLS = 20
@@ -41,9 +42,9 @@ SNAKE_1 = [
 SNAKE_1_CLR = (0, 255, 0) 
 
 SNAKE_2 = [
-    [HORIZONTAL_CELLS - 3, VERTICAL_CELLS - 1],
+    [HORIZONTAL_CELLS - 1, VERTICAL_CELLS - 1],
     [HORIZONTAL_CELLS - 2, VERTICAL_CELLS - 1],
-    [HORIZONTAL_CELLS - 1, VERTICAL_CELLS - 1]
+    [HORIZONTAL_CELLS - 3, VERTICAL_CELLS - 1]
 ]
 SNAKE_2_CLR = (0, 0, 255) 
 
@@ -80,7 +81,6 @@ def move_snake(snake, direction):
     else:
         if len(snake) > 1:
             snake.pop()
-
     snake.insert(0, new_head)
     return snake
 
@@ -93,10 +93,16 @@ def grow_snake(snake):
 def move_snake_1(direction):
     global SNAKE_1
     SNAKE_1 = move_snake(SNAKE_1, direction)
+    if SNAKE_1[0] in SNAKE_2 + SNAKE_1[1:]:
+        return False
+    return True
 
 def move_snake_2(direction):
     global SNAKE_2
     SNAKE_2 = move_snake(SNAKE_2, direction)
+    if SNAKE_2[0] in SNAKE_1 + SNAKE_2[1:]:
+        return False
+    return True
 
 def draw_grid():
     for x in range(HORIZONTAL_CELLS):
@@ -128,12 +134,19 @@ def main():
                 running = False
         screen.fill((0, 0, 0)) 
 
-        move_snake_1(answer.best_snake_dir(SNAKE_1, SNAKE_2, FRUIT, HORIZONTAL_CELLS, VERTICAL_CELLS))
-        move_snake_2(answer.best_snake_dir(SNAKE_2, SNAKE_1, FRUIT, HORIZONTAL_CELLS, VERTICAL_CELLS))
-        
+        x = move_snake_1(answer.best_snake_dir(deepcopy(SNAKE_1), deepcopy(SNAKE_2), FRUIT, HORIZONTAL_CELLS, VERTICAL_CELLS))
+        y = move_snake_2(answer.best_snake_dir(deepcopy(SNAKE_2), deepcopy(SNAKE_1), FRUIT, HORIZONTAL_CELLS, VERTICAL_CELLS))
+
+        if not x or not y:
+            print("Game Over!")
+            running = False
         draw_grid()
         pygame.display.flip()    
         clock.tick(10)
+    pygame.quit()
+    print("Pygame window closed.")
+    print("Final Score:")
+    print(f"Snake 1 Length: {len(SNAKE_1)}\nSnake 2 Length: {len(SNAKE_2)}")
     pygame.quit()
 
 if __name__ == "__main__":

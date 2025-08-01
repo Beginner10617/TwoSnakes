@@ -8,6 +8,8 @@ def best_snake_dir(your_snake, other_snake, fruit, horizontal_cells, vertical_ce
     :param horizontal_cells: Number of horizontal cells in the grid.
     :param vertical_cells: Number of vertical cells in the grid.
     :return: Best direction as a string ('U', 'D', 'L', 'R').
+    
+    Note that there are no walls, so the snake can wrap around the grid.
     """
     # Implement logic to determine the best direction
     # This is a placeholder implementation
