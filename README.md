@@ -14,7 +14,7 @@ Return the best direction for your snake to move: `'U'`, `'D'`, `'L'`, or `'R'`.
 
 ## 📜 Rules
 
-- The game is played on a grid of size `horizontal_cells × vertical_cells`.
+- The game is played on a grid of size `HORIZONTAL_CELLS × VERTICAL_CELLS`.
 - The grid **wraps around**: moving off one edge brings the snake to the opposite side (like Pac-Man).
 - The function should return one of the four directions: `'U'` (up), `'D'` (down), `'L'` (left), or `'R'` (right).
 - Avoid any collision with:
@@ -24,8 +24,8 @@ Return the best direction for your snake to move: `'U'`, `'D'`, `'L'`, or `'R'`.
 
 ## 🗂 Files
 
-- `answer.py`: Contains the function signature and problem description.
-- `main.py`: (Optional) You can add visualization or test cases here.
+- `answer.py`: Contains the function signature and problem description
+- `main.py`: (Optional) You can add custom test cases here, a default gameplay is already set
 
 ## 🚀 Contribute
 
