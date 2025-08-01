@@ -8,24 +8,24 @@ VERTICAL_CELLS = 10
 THICKNESS = 1
 
 def set_thickness(thickness):
-    assert isinstance(thickness, int) and thickness > 0, "Thickness must be a positive integer."
-    assert thickness <= CELL_SIZE, "Thickness must not exceed cell size."
+    assert isinstance(thickness, int) and thickness > 0, "Thickness must be a positive integer"
+    assert thickness <= CELL_SIZE, "Thickness must not exceed cell size"
     global THICKNESS
     THICKNESS = thickness
 
 def set_cell_size(size):
-    assert isinstance(size, int) and size > 0, "Cell size must be a positive integer."
-    assert size >= THICKNESS, "Cell size must be greater than or equal to thickness."
+    assert isinstance(size, int) and size > 0, "Cell size must be a positive integer"
+    assert size >= THICKNESS, "Cell size must be greater than or equal to thickness"
     global CELL_SIZE
     CELL_SIZE = size
 
 def set_grid_dimensions(horizontal_cells, vertical_cells):
-    assert isinstance(horizontal_cells, int) and horizontal_cells > 0, "Horizontal cells must be a positive integer."
-    assert isinstance(vertical_cells, int) and vertical_cells > 0, "Vertical cells must be a positive integer."
-    assert horizontal_cells * CELL_SIZE > THICKNESS, "Grid width must be greater than thickness."
-    assert vertical_cells * CELL_SIZE > THICKNESS, "Grid height must be greater than thickness."
-    assert horizontal_cells > 1, "Horizontal cells must be greater than 1."
-    assert vertical_cells > 1, "Vertical cells must be greater than 1."
+    assert isinstance(horizontal_cells, int) and horizontal_cells > 0, "Horizontal cells must be a positive integer"
+    assert isinstance(vertical_cells, int) and vertical_cells > 0, "Vertical cells must be a positive integer"
+    assert horizontal_cells * CELL_SIZE > THICKNESS, "Grid width must be greater than thickness"
+    assert vertical_cells * CELL_SIZE > THICKNESS, "Grid height must be greater than thickness"
+    assert horizontal_cells > 1, "Horizontal cells must be greater than 1"
+    assert vertical_cells > 1, "Vertical cells must be greater than 1"
 
     global HORIZONTAL_CELLS, VERTICAL_CELLS
     HORIZONTAL_CELLS = horizontal_cells
@@ -58,8 +58,8 @@ def generate_fruit():
             break
 
 def move_snake(snake, direction):
-    assert direction in ['U', 'D', 'L', 'R'], "Invalid direction. Use 'U', 'D', 'L', or 'R'."
-    assert isinstance(snake, list) and all(isinstance(segment, list) and len(segment) == 2 for segment in snake), "Snake must be a list of [x, y] pairs."
+    assert direction in ['U', 'D', 'L', 'R'], "Invalid direction. Use 'U', 'D', 'L', or 'R'"
+    assert isinstance(snake, list) and all(isinstance(segment, list) and len(segment) == 2 for segment in snake), "Snake must be a list of [x, y] pairs"
     head = snake[0]
     if direction == 'U':
         new_head = [head[0], head[1] - 1]
@@ -85,7 +85,7 @@ def move_snake(snake, direction):
     return snake
 
 def grow_snake(snake):
-    assert isinstance(snake, list) and all(isinstance(segment, list) and len(segment) == 2 for segment in snake), "Snake must be a list of [x, y] pairs."
+    assert isinstance(snake, list) and all(isinstance(segment, list) and len(segment) == 2 for segment in snake), "Snake must be a list of [x, y] pairs"
     tail = snake[-1]
     snake.append(tail)  
     return snake
@@ -127,7 +127,7 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((HORIZONTAL_CELLS * CELL_SIZE, VERTICAL_CELLS * CELL_SIZE))
     pygame.display.set_caption("Pygame Window")
-    print("Moves will be displayed in the console.")
+    print("Moves will be displayed in the console")
     running = True
     clock = pygame.time.Clock()
     while running:
@@ -146,7 +146,7 @@ def main():
         pygame.display.flip()    
         clock.tick(10)
     pygame.quit()
-    print("Pygame window closed.")
+    print("\nPygame window closed")
     print("Final Score:")
     print(f"Snake 1 Length: {len(SNAKE_1)}\nSnake 2 Length: {len(SNAKE_2)}")
     pygame.quit()
